@@ -18,4 +18,4 @@ picked up by new workers.
 
 4. Add work with `start.py`
 
-5. Remove work with `stop.py`
+5. Remove work with `stop.py <workflow-uid>`
