@@ -19,7 +19,6 @@ def main():
             del response['ResponseMetadata']
             if response:
                 flows = [flow['execution']['workflowId'] for flow in response['executionInfos'] if flow['cancelRequested'] == False]
-                print flows
                 adds = [i for i in items if i not in flows]
                 dels = [f for f in flows if f not in items]
                 for a in adds:
