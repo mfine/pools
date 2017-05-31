@@ -20,5 +20,5 @@ picked up by new workers.
 
 5. Remove work with `stop.py <workflow-uid>`
 
-5. Alternatively to adding or removing work, workers can be converged with
+6. Alternatively to adding or removing work, workers can be converged with
    `converge.py <yaml-file>`
