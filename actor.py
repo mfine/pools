@@ -4,6 +4,7 @@ import boto3
 from botocore.client import Config
 from botocore.exceptions import ClientError
 import sys
+import time
 
 def main():
     config = Config(connect_timeout=70, read_timeout=70)
@@ -15,10 +16,32 @@ def main():
                 taskList = {'name': 'activity'},
             )
             if 'taskToken' in task:
-                print task['workflowExecution']['workflowId']
-                client.respond_activity_task_completed(
-                    taskToken = task['taskToken'],
-                )
+                canceled = False
+                while True:
+                    print task['workflowExecution']['workflowId']
+                    time.sleep(5.0)
+                    response = client.record_activity_task_heartbeat(
+                        taskToken = task['taskToken'],
+                    )
+                    del response['ResponseMetadata']
+                    if response:
+                        print response
+                    if response['cancelRequested'] == True:
+                        canceled = True
+                        response = client.respond_activity_task_canceled(
+                            taskToken = task['taskToken'],
+                        )
+                        del response['ResponseMetadata']
+                        if response:
+                            print response
+                        break
+                if not canceled:
+                    response = client.respond_activity_task_completed(
+                        taskToken = task['taskToken'],
+                    )
+                    del response['ResponseMetadata']
+                    if response:
+                        print response
         except ClientError as e:
             raise
         except KeyboardInterrupt:

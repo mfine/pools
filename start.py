@@ -12,7 +12,7 @@ def main():
         client.start_workflow_execution(
             domain = 'loops',
             workflowId = str(uid),
-            workflowType = {'name': 'workflow', 'version': '1.2'},
+            workflowType = {'name': 'workflow', 'version': '1.4'},
             taskList = {'name': 'workflow'},
             executionStartToCloseTimeout = '604800',
             taskStartToCloseTimeout = 'NONE',

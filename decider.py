@@ -20,22 +20,27 @@ def main():
                     history = [event for event in task['events'] if not event['eventType'].startswith('Decision')]
                     last = history[-1]
                     if last['eventType'] == 'WorkflowExecutionStarted':
+                        print 'WorkflowExecutionStarted'
                         uid = uuid.uuid4()
                         print uid
-                        client.respond_decision_task_completed(
+                        response = client.respond_decision_task_completed(
                             taskToken = task['taskToken'],
                             decisions = [
                                 { 'decisionType': 'ScheduleActivityTask',
                                   'scheduleActivityTaskDecisionAttributes': {
-                                      'activityType': {'name': 'activity', 'version': '1.2'},
+                                      'activityType': {'name': 'activity', 'version': '1.4'},
                                       'taskList': {'name': 'activity'},
                                       'activityId': str(uid),
                                   },
                                 },
                             ],
                         )
+                        del response['ResponseMetadata']
+                        if response:
+                            print response
                     elif last['eventType'] == 'ActivityTaskCompleted':
-                        client.respond_decision_task_completed(
+                        print 'ActivityTaskCompleted'
+                        response = client.respond_decision_task_completed(
                             taskToken = task['taskToken'],
                             decisions = [
                               { 'decisionType': 'CompleteWorkflowExecution',
@@ -44,6 +49,62 @@ def main():
                               },
                             ],
                         )
+                        del response['ResponseMetadata']
+                        if response:
+                            print response
+                    elif last['eventType'] == 'ActivityTaskTimedOut':
+                        print 'ActivityTaskTimedOut'
+                        uid = uuid.uuid4()
+                        print uid
+                        response = client.respond_decision_task_completed(
+                            taskToken = task['taskToken'],
+                            decisions = [
+                                { 'decisionType': 'ScheduleActivityTask',
+                                  'scheduleActivityTaskDecisionAttributes': {
+                                      'activityType': {'name': 'activity', 'version': '1.4'},
+                                      'taskList': {'name': 'activity'},
+                                      'activityId': str(uid),
+                                  },
+                                },
+                            ],
+                        )
+                        del response['ResponseMetadata']
+                        if response:
+                            print response
+                    elif last['eventType'] == 'WorkflowExecutionCancelRequested':
+                        print 'WorkflowExecutionCancelRequested'
+                        history1 = [event for event in task['events'] if event['eventType'] == 'ActivityTaskScheduled']
+                        last1 = history1[-1]
+                        response = client.respond_decision_task_completed(
+                            taskToken = task['taskToken'],
+                            decisions = [
+                                { 'decisionType': 'RequestCancelActivityTask',
+                                  'requestCancelActivityTaskDecisionAttributes': {
+                                      'activityId': last1['activityTaskScheduledEventAttributes']['activityId'],
+                                  },
+                                },
+                            ],
+                        )
+                        del response['ResponseMetadata']
+                        if response:
+                            print response
+                    elif last['eventType'] == 'ActivityTaskCanceled':
+                        print 'ActivityTaskCanceled'
+                        response = client.respond_decision_task_completed(
+                            taskToken = task['taskToken'],
+                            decisions = [
+                                { 'decisionType': 'CompleteWorkflowExecution',
+                                  'completeWorkflowExecutionDecisionAttributes': {
+                                  },
+                                },
+                            ],
+                        )
+                        del response['ResponseMetadata']
+                        if response:
+                            print response
+                    else:
+                        print 'UNKNOWN'
+                        print last
         except ClientError as e:
             raise
         except KeyboardInterrupt:
