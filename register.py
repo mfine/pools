@@ -7,7 +7,7 @@ def main():
     client = boto3.client('swf')
     try:
         client.register_domain(
-            name = 'loops',
+            name = 'pools',
             workflowExecutionRetentionPeriodInDays = 'NONE',
         )
     except ClientError as e:
@@ -15,9 +15,9 @@ def main():
             raise
     try:
         client.register_workflow_type(
-            domain = 'loops',
+            domain = 'pools',
             name = 'workflow',
-            version = '1.4',
+            version = '1.0',
             defaultTaskStartToCloseTimeout = 'NONE',
             defaultExecutionStartToCloseTimeout = '31536000',
         )
@@ -26,9 +26,9 @@ def main():
             raise
     try:
         client.register_activity_type(
-            domain = 'loops',
+            domain = 'pools',
             name = 'activity',
-            version = '1.4',
+            version = '1.0',
             defaultTaskStartToCloseTimeout = 'NONE',
             defaultTaskScheduleToStartTimeout = '15',
             defaultTaskScheduleToCloseTimeout = 'NONE',

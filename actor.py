@@ -12,7 +12,7 @@ def main():
     while True:
         try:
             task = client.poll_for_activity_task(
-                domain = 'loops',
+                domain = 'pools',
                 taskList = {'name': 'activity'},
             )
             if 'taskToken' in task:

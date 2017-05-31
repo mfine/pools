@@ -10,9 +10,9 @@ def main():
     print uid
     try:
         client.start_workflow_execution(
-            domain = 'loops',
+            domain = 'pools',
             workflowId = str(uid),
-            workflowType = {'name': 'workflow', 'version': '1.4'},
+            workflowType = {'name': 'workflow', 'version': '1.0'},
             taskList = {'name': 'workflow'},
             executionStartToCloseTimeout = '31536000',
             taskStartToCloseTimeout = 'NONE',

@@ -12,9 +12,9 @@ def main():
         client = boto3.client('swf')
         try:
             response = client.list_open_workflow_executions(
-                domain = 'loops',
+                domain = 'pools',
                 startTimeFilter = {'oldestDate': datetime.datetime(1970, 1, 1)},
-                typeFilter = {'name': 'workflow', 'version': '1.4'},
+                typeFilter = {'name': 'workflow', 'version': '1.0'},
             )
             del response['ResponseMetadata']
             if response:
@@ -25,9 +25,9 @@ def main():
                 for a in adds:
                     print "Starting %s" % a
                     client.start_workflow_execution(
-                        domain = 'loops',
+                        domain = 'pools',
                         workflowId = a,
-                        workflowType = {'name': 'workflow', 'version': '1.4'},
+                        workflowType = {'name': 'workflow', 'version': '1.0'},
                         taskList = {'name': 'workflow'},
                         executionStartToCloseTimeout = '31536000',
                         taskStartToCloseTimeout = 'NONE',
@@ -36,7 +36,7 @@ def main():
                 for d in dels:
                     print "Stopping %s" % d
                     client.request_cancel_workflow_execution(
-                        domain = 'loops',
+                        domain = 'pools',
                         workflowId = d,
                     )
         except ClientError as e:

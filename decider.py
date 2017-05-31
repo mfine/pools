@@ -12,7 +12,7 @@ def main():
     while True:
         try:
             task = client.poll_for_decision_task(
-                domain = 'loops',
+                domain = 'pools',
                 taskList = {'name': 'workflow'},
             )
             if 'taskToken' in task:
@@ -28,7 +28,7 @@ def main():
                             decisions = [
                                 { 'decisionType': 'ScheduleActivityTask',
                                   'scheduleActivityTaskDecisionAttributes': {
-                                      'activityType': {'name': 'activity', 'version': '1.4'},
+                                      'activityType': {'name': 'activity', 'version': '1.0'},
                                       'taskList': {'name': 'activity'},
                                       'activityId': str(uid),
                                   },
@@ -61,7 +61,7 @@ def main():
                             decisions = [
                                 { 'decisionType': 'ScheduleActivityTask',
                                   'scheduleActivityTaskDecisionAttributes': {
-                                      'activityType': {'name': 'activity', 'version': '1.4'},
+                                      'activityType': {'name': 'activity', 'version': '1.0'},
                                       'taskList': {'name': 'activity'},
                                       'activityId': str(uid),
                                   },
