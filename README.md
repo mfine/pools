@@ -19,3 +19,6 @@ picked up by new workers.
 4. Add work with `start.py`
 
 5. Remove work with `stop.py <workflow-uid>`
+
+5. Alternatively to adding or removing work, workers can be converged with
+   `converge.py <yaml-file>`
