@@ -9,18 +9,17 @@ import datetime
 def main():
     with open(sys.argv[1], 'r') as f:
         items = yaml.load(f)
-#        print items
         client = boto3.client('swf')
         try:
             response = client.list_open_workflow_executions(
                 domain = 'loops',
-                startTimeFilter = {
-                    'oldestDate': datetime.datetime(1970, 1, 1),
-                },
+                startTimeFilter = {'oldestDate': datetime.datetime(1970, 1, 1)},
+                typeFilter = {'name': 'workflow', 'version': '1.4'},
             )
             del response['ResponseMetadata']
             if response:
                 flows = [flow['execution']['workflowId'] for flow in response['executionInfos'] if flow['cancelRequested'] == False]
+                print flows
                 adds = [i for i in items if i not in flows]
                 dels = [f for f in flows if f not in items]
                 for a in adds:
@@ -30,7 +29,7 @@ def main():
                         workflowId = a,
                         workflowType = {'name': 'workflow', 'version': '1.4'},
                         taskList = {'name': 'workflow'},
-                        executionStartToCloseTimeout = '604800',
+                        executionStartToCloseTimeout = '31536000',
                         taskStartToCloseTimeout = 'NONE',
                         childPolicy = 'ABANDON',
                     )

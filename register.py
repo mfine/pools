@@ -19,7 +19,7 @@ def main():
             name = 'workflow',
             version = '1.4',
             defaultTaskStartToCloseTimeout = 'NONE',
-            defaultExecutionStartToCloseTimeout = '604800',
+            defaultExecutionStartToCloseTimeout = '31536000',
         )
     except ClientError as e:
         if e.response['Error']['Code'] != 'TypeAlreadyExistsFault':

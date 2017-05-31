@@ -14,7 +14,7 @@ def main():
             workflowId = str(uid),
             workflowType = {'name': 'workflow', 'version': '1.4'},
             taskList = {'name': 'workflow'},
-            executionStartToCloseTimeout = '604800',
+            executionStartToCloseTimeout = '31536000',
             taskStartToCloseTimeout = 'NONE',
             childPolicy = 'ABANDON',
         )
