@@ -19,7 +19,7 @@ def main():
             if 'taskToken' in task:
                 canceled = False
                 while True:
-                    print task['workflowExecution']['workflowId']
+                    print "%s with %s" % (task['workflowExecution']['workflowId'], task['input'])
                     time.sleep(5.0)
                     response = client.record_activity_task_heartbeat(
                         taskToken = task['taskToken'],

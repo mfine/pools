@@ -19,10 +19,11 @@ def main():
             del response['ResponseMetadata']
             if response:
                 flows = [flow['execution']['workflowId'] for flow in response['executionInfos'] if flow['cancelRequested'] == False]
-                adds = [i for i in items if i not in flows]
-                dels = [f for f in flows if f not in items]
+                adds = [i for i in items.keys() if i not in flows]
+                dels = [f for f in flows if f not in items.keys()]
                 for a in adds:
-                    print "Starting %s" % a
+                    input = items[a]['input']
+                    print "Starting %s with %s" % (a, input)
                     try:
                         client.start_workflow_execution(
                             domain = 'pools',
@@ -32,6 +33,7 @@ def main():
                             executionStartToCloseTimeout = '31536000',
                             taskStartToCloseTimeout = 'NONE',
                             childPolicy = 'ABANDON',
+                            input = input,
                         )
                     except ClientError as e:
                         if e.response['Error']['Code'] != 'UnknownResourceFault':

@@ -15,7 +15,6 @@ def main():
         if e.response['Error']['Code'] != 'UnknownResourceFault':
             raise
 
-
 if __name__ == "__main__":
     main()
 

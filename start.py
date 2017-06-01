@@ -3,6 +3,7 @@
 import boto3
 from botocore.exceptions import ClientError
 import uuid
+import sys
 
 def main():
     client = boto3.client('swf')
@@ -17,6 +18,7 @@ def main():
             executionStartToCloseTimeout = '31536000',
             taskStartToCloseTimeout = '15',
             childPolicy = 'ABANDON',
+            input = sys.argv[1],
         )
     except ClientError as e:
         raise

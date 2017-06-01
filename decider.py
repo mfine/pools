@@ -33,6 +33,7 @@ def main():
                                       'activityType': {'name': 'activity', 'version': '1.1'},
                                       'taskList': {'name': 'activity'},
                                       'activityId': str(uid),
+                                      'input': last['workflowExecutionStartedEventAttributes']['input'],
                                   },
                                 },
                             ],
@@ -56,6 +57,8 @@ def main():
                             print response
                     elif last['eventType'] == 'ActivityTaskTimedOut':
                         print 'ActivityTaskTimedOut'
+                        history1 = [event for event in task['events'] if event['eventType'] == 'ActivityTaskScheduled']
+                        last1 = history1[0]
                         uid = uuid.uuid4()
                         print uid
                         response = client.respond_decision_task_completed(
@@ -66,6 +69,7 @@ def main():
                                       'activityType': {'name': 'activity', 'version': '1.1'},
                                       'taskList': {'name': 'activity'},
                                       'activityId': str(uid),
+                                      'input': last1['activityTaskScheduledEventAttributes']['input'],
                                   },
                                 },
                             ],
