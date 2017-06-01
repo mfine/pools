@@ -20,7 +20,6 @@ def main():
             if 'taskToken' in task:
                 if 'events' in task:
                     history = [event for event in task['events'] if not event['eventType'].startswith('Decision')]
-                    print task['events']
                     last = history[0]
                     if last['eventType'] == 'WorkflowExecutionStarted':
                         print 'WorkflowExecutionStarted'
@@ -77,20 +76,34 @@ def main():
                     elif last['eventType'] == 'WorkflowExecutionCancelRequested':
                         print 'WorkflowExecutionCancelRequested'
                         history1 = [event for event in task['events'] if event['eventType'] == 'ActivityTaskScheduled']
-                        last1 = history1[0]
-                        response = client.respond_decision_task_completed(
-                            taskToken = task['taskToken'],
-                            decisions = [
-                                { 'decisionType': 'RequestCancelActivityTask',
-                                  'requestCancelActivityTaskDecisionAttributes': {
-                                      'activityId': last1['activityTaskScheduledEventAttributes']['activityId'],
-                                  },
-                                },
-                            ],
-                        )
-                        del response['ResponseMetadata']
-                        if response:
-                            print response
+                        if history1:
+                            last1 = history1[0]
+                            response = client.respond_decision_task_completed(
+                                taskToken = task['taskToken'],
+                                decisions = [
+                                    { 'decisionType': 'RequestCancelActivityTask',
+                                      'requestCancelActivityTaskDecisionAttributes': {
+                                          'activityId': last1['activityTaskScheduledEventAttributes']['activityId'],
+                                      },
+                                    },
+                                ],
+                            )
+                            del response['ResponseMetadata']
+                            if response:
+                                print response
+                        else:
+                            response = client.respond_decision_task_completed(
+                                taskToken = task['taskToken'],
+                                decisions = [
+                                    { 'decisionType': 'CancelWorkflowExecution',
+                                      'cancelWorkflowExecutionDecisionAttributes': {
+                                      },
+                                    },
+                                ],
+                            )
+                            del response['ResponseMetadata']
+                            if response:
+                                print response
                     elif last['eventType'] == 'ActivityTaskCanceled':
                         print 'ActivityTaskCanceled'
                         response = client.respond_decision_task_completed(
@@ -105,40 +118,8 @@ def main():
                         del response['ResponseMetadata']
                         if response:
                             print response
-                    elif last['eventType'] == 'ActivityTaskScheduled':
-                        print '*** ActivityTaskScheduled ***'
-                        response = client.respond_decision_task_completed(
-                            taskToken = task['taskToken'],
-                            decisions = [],
-                        )
-                        del response['ResponseMetadata']
-                        if response:
-                            print response
-                    elif last['eventType'] == 'ActivityTaskStarted':
-                        print '*** ActivityTaskStarted ***'
-                        response = client.respond_decision_task_completed(
-                            taskToken = task['taskToken'],
-                            decisions = [],
-                        )
-                        del response['ResponseMetadata']
-                        if response:
-                            print response
                     elif last['eventType'] == 'RequestCancelActivityTaskFailed':
-                        print '*** RequestCancelActivityTaskFailed ***'
-                        response = client.respond_decision_task_completed(
-                            taskToken = task['taskToken'],
-                            decisions = [
-                                { 'decisionType': 'FailWorkflowExecution',
-                                  'failWorkflowExecutionDecisionAttributes': {
-                                  },
-                                },
-                            ],
-                        )
-                        del response['ResponseMetadata']
-                        if response:
-                            print response
-                    elif last['eventType'] == 'FailWorkflowExecutionFailed':
-                        print '*** FailWorkflowExecutionFailed ***'
+                        print 'RequestCancelActivityTaskFailed'
                         response = client.respond_decision_task_completed(
                             taskToken = task['taskToken'],
                             decisions = [],
