@@ -23,21 +23,29 @@ def main():
                 dels = [f for f in flows if f not in items]
                 for a in adds:
                     print "Starting %s" % a
-                    client.start_workflow_execution(
-                        domain = 'pools',
-                        workflowId = a,
-                        workflowType = {'name': 'workflow', 'version': '1.1'},
-                        taskList = {'name': 'workflow'},
-                        executionStartToCloseTimeout = '31536000',
-                        taskStartToCloseTimeout = 'NONE',
-                        childPolicy = 'ABANDON',
-                    )
+                    try:
+                        client.start_workflow_execution(
+                            domain = 'pools',
+                            workflowId = a,
+                            workflowType = {'name': 'workflow', 'version': '1.1'},
+                            taskList = {'name': 'workflow'},
+                            executionStartToCloseTimeout = '31536000',
+                            taskStartToCloseTimeout = 'NONE',
+                            childPolicy = 'ABANDON',
+                        )
+                    except ClientError as e:
+                        if e.response['Error']['Code'] != 'UnknownResourceFault':
+                            raise
                 for d in dels:
                     print "Stopping %s" % d
-                    client.request_cancel_workflow_execution(
-                        domain = 'pools',
-                        workflowId = d,
-                    )
+                    try:
+                        client.request_cancel_workflow_execution(
+                            domain = 'pools',
+                            workflowId = d,
+                        )
+                    except ClientError as e:
+                        if e.response['Error']['Code'] != 'UnknownResourceFault':
+                            raise
         except ClientError as e:
             raise
 

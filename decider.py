@@ -122,7 +122,12 @@ def main():
                         print 'RequestCancelActivityTaskFailed'
                         response = client.respond_decision_task_completed(
                             taskToken = task['taskToken'],
-                            decisions = [],
+                            decisions = [
+                                { 'decisionType': 'CancelWorkflowExecution',
+                                  'cancelWorkflowExecutionDecisionAttributes': {
+                                  },
+                                },
+                            ],
                         )
                         del response['ResponseMetadata']
                         if response:
