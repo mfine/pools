@@ -107,12 +107,7 @@ def main():
                         print '*** ActivityTaskScheduled ***'
                         response = client.respond_decision_task_completed(
                             taskToken = task['taskToken'],
-                            decisions = [
-                                { 'decisionType': 'FailWorkflowExecution',
-                                  'failWorkflowExecutionDecisionAttributes': {
-                                  },
-                                },
-                            ],
+                            decisions = [],
                         )
                         del response['ResponseMetadata']
                         if response:
@@ -121,12 +116,7 @@ def main():
                         print '*** ActivityTaskStarted ***'
                         response = client.respond_decision_task_completed(
                             taskToken = task['taskToken'],
-                            decisions = [
-                                { 'decisionType': 'FailWorkflowExecution',
-                                  'failWorkflowExecutionDecisionAttributes': {
-                                  },
-                                },
-                            ],
+                            decisions = [],
                         )
                         del response['ResponseMetadata']
                         if response:
@@ -149,12 +139,7 @@ def main():
                         print '*** FailWorkflowExecutionFailed ***'
                         response = client.respond_decision_task_completed(
                             taskToken = task['taskToken'],
-                            decisions = [
-                                { 'decisionType': 'FailWorkflowExecution',
-                                  'failWorkflowExecutionDecisionAttributes': {
-                                  },
-                                },
-                            ],
+                            decisions = [],
                         )
                         del response['ResponseMetadata']
                         if response:
@@ -164,12 +149,7 @@ def main():
                         print last
                         response = client.respond_decision_task_completed(
                             taskToken = task['taskToken'],
-                            decisions = [
-                                { 'decisionType': 'FailWorkflowExecution',
-                                  'failWorkflowExecutionDecisionAttributes': {
-                                  },
-                                },
-                            ],
+                            decisions = [],
                         )
                         del response['ResponseMetadata']
                         if response:
