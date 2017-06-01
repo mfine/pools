@@ -1,6 +1,12 @@
 aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa:
-  input: foo
+  input:
+    a: foo
 bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb:
-  input: bar
+  input:
+    a: bar
+    b: wut
 cccccccc-cccc-cccc-cccc-cccccccccccd:
-  input: baz
+  input:
+    a: baz
+    c:
+      z: dog

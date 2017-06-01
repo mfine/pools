@@ -2,6 +2,7 @@
 
 import boto3
 from botocore.exceptions import ClientError
+import json
 import uuid
 import sys
 
@@ -18,7 +19,7 @@ def main():
             executionStartToCloseTimeout = '31536000',
             taskStartToCloseTimeout = '15',
             childPolicy = 'ABANDON',
-            input = sys.argv[1],
+            input = json.dumps(sys.argv[1]),
         )
     except ClientError as e:
         raise

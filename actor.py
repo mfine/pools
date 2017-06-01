@@ -5,6 +5,7 @@ from botocore.client import Config
 from botocore.exceptions import ClientError
 import sys
 import time
+import json
 
 def main():
     config = Config(connect_timeout=70, read_timeout=70)
@@ -19,7 +20,7 @@ def main():
             if 'taskToken' in task:
                 canceled = False
                 while True:
-                    print "%s with %s" % (task['workflowExecution']['workflowId'], task['input'])
+                    print "%s with %s" % (task['workflowExecution']['workflowId'], json.loads(task['input']))
                     time.sleep(5.0)
                     response = client.record_activity_task_heartbeat(
                         taskToken = task['taskToken'],

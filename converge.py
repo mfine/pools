@@ -3,6 +3,7 @@
 import boto3
 from botocore.exceptions import ClientError
 import sys
+import json
 import yaml
 import datetime
 
@@ -33,7 +34,7 @@ def main():
                             executionStartToCloseTimeout = '31536000',
                             taskStartToCloseTimeout = 'NONE',
                             childPolicy = 'ABANDON',
-                            input = input,
+                            input = json.dumps(input),
                         )
                     except ClientError as e:
                         if e.response['Error']['Code'] != 'UnknownResourceFault':
