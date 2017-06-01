@@ -12,7 +12,8 @@ def main():
             workflowId = sys.argv[1],
         )
     except ClientError as e:
-        raise
+        if e.response['Error']['Code'] != 'UnknownResourceFault':
+            raise
 
 
 if __name__ == "__main__":
