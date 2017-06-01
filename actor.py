@@ -11,6 +11,7 @@ def main():
     client = boto3.client('swf', config=config)
     while True:
         try:
+            print "------"
             task = client.poll_for_activity_task(
                 domain = 'pools',
                 taskList = {'name': 'activity'},

@@ -11,6 +11,7 @@ def main():
     client = boto3.client('swf', config=config)
     while True:
         try:
+            print "------"
             task = client.poll_for_decision_task(
                 domain = 'pools',
                 taskList = {'name': 'workflow'},
@@ -102,9 +103,77 @@ def main():
                         del response['ResponseMetadata']
                         if response:
                             print response
+                    elif last['eventType'] == 'ActivityTaskScheduled':
+                        print '*** ActivityTaskScheduled ***'
+                        response = client.respond_decision_task_completed(
+                            taskToken = task['taskToken'],
+                            decisions = [
+                                { 'decisionType': 'FailWorkflowExecution',
+                                  'failWorkflowExecutionDecisionAttributes': {
+                                  },
+                                },
+                            ],
+                        )
+                        del response['ResponseMetadata']
+                        if response:
+                            print response
+                    elif last['eventType'] == 'ActivityTaskStarted':
+                        print '*** ActivityTaskStarted ***'
+                        response = client.respond_decision_task_completed(
+                            taskToken = task['taskToken'],
+                            decisions = [
+                                { 'decisionType': 'FailWorkflowExecution',
+                                  'failWorkflowExecutionDecisionAttributes': {
+                                  },
+                                },
+                            ],
+                        )
+                        del response['ResponseMetadata']
+                        if response:
+                            print response
+                    elif last['eventType'] == 'RequestCancelActivityTaskFailed':
+                        print '*** RequestCancelActivityTaskFailed ***'
+                        response = client.respond_decision_task_completed(
+                            taskToken = task['taskToken'],
+                            decisions = [
+                                { 'decisionType': 'FailWorkflowExecution',
+                                  'failWorkflowExecutionDecisionAttributes': {
+                                  },
+                                },
+                            ],
+                        )
+                        del response['ResponseMetadata']
+                        if response:
+                            print response
+                    elif last['eventType'] == 'FailWorkflowExecutionFailed':
+                        print '*** FailWorkflowExecutionFailed ***'
+                        response = client.respond_decision_task_completed(
+                            taskToken = task['taskToken'],
+                            decisions = [
+                                { 'decisionType': 'FailWorkflowExecution',
+                                  'failWorkflowExecutionDecisionAttributes': {
+                                  },
+                                },
+                            ],
+                        )
+                        del response['ResponseMetadata']
+                        if response:
+                            print response
                     else:
                         print 'UNKNOWN'
                         print last
+                        response = client.respond_decision_task_completed(
+                            taskToken = task['taskToken'],
+                            decisions = [
+                                { 'decisionType': 'FailWorkflowExecution',
+                                  'failWorkflowExecutionDecisionAttributes': {
+                                  },
+                                },
+                            ],
+                        )
+                        del response['ResponseMetadata']
+                        if response:
+                            print response
         except ClientError as e:
             raise
         except KeyboardInterrupt:
