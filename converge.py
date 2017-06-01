@@ -14,7 +14,7 @@ def main():
             response = client.list_open_workflow_executions(
                 domain = 'pools',
                 startTimeFilter = {'oldestDate': datetime.datetime(1970, 1, 1)},
-                typeFilter = {'name': 'workflow', 'version': '1.0'},
+                typeFilter = {'name': 'workflow', 'version': '1.1'},
             )
             del response['ResponseMetadata']
             if response:
@@ -26,7 +26,7 @@ def main():
                     client.start_workflow_execution(
                         domain = 'pools',
                         workflowId = a,
-                        workflowType = {'name': 'workflow', 'version': '1.0'},
+                        workflowType = {'name': 'workflow', 'version': '1.1'},
                         taskList = {'name': 'workflow'},
                         executionStartToCloseTimeout = '31536000',
                         taskStartToCloseTimeout = 'NONE',

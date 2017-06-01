@@ -17,8 +17,8 @@ def main():
         client.register_workflow_type(
             domain = 'pools',
             name = 'workflow',
-            version = '1.0',
-            defaultTaskStartToCloseTimeout = 'NONE',
+            version = '1.1',
+            defaultTaskStartToCloseTimeout = '15',
             defaultExecutionStartToCloseTimeout = '31536000',
         )
     except ClientError as e:
@@ -28,7 +28,7 @@ def main():
         client.register_activity_type(
             domain = 'pools',
             name = 'activity',
-            version = '1.0',
+            version = '1.1',
             defaultTaskStartToCloseTimeout = 'NONE',
             defaultTaskScheduleToStartTimeout = '15',
             defaultTaskScheduleToCloseTimeout = 'NONE',

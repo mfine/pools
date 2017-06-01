@@ -15,11 +15,13 @@ def main():
             task = client.poll_for_decision_task(
                 domain = 'pools',
                 taskList = {'name': 'workflow'},
+                reverseOrder = True,
             )
             if 'taskToken' in task:
                 if 'events' in task:
                     history = [event for event in task['events'] if not event['eventType'].startswith('Decision')]
-                    last = history[-1]
+                    print task['events']
+                    last = history[0]
                     if last['eventType'] == 'WorkflowExecutionStarted':
                         print 'WorkflowExecutionStarted'
                         uid = uuid.uuid4()
@@ -29,7 +31,7 @@ def main():
                             decisions = [
                                 { 'decisionType': 'ScheduleActivityTask',
                                   'scheduleActivityTaskDecisionAttributes': {
-                                      'activityType': {'name': 'activity', 'version': '1.0'},
+                                      'activityType': {'name': 'activity', 'version': '1.1'},
                                       'taskList': {'name': 'activity'},
                                       'activityId': str(uid),
                                   },
@@ -62,7 +64,7 @@ def main():
                             decisions = [
                                 { 'decisionType': 'ScheduleActivityTask',
                                   'scheduleActivityTaskDecisionAttributes': {
-                                      'activityType': {'name': 'activity', 'version': '1.0'},
+                                      'activityType': {'name': 'activity', 'version': '1.1'},
                                       'taskList': {'name': 'activity'},
                                       'activityId': str(uid),
                                   },
@@ -75,7 +77,7 @@ def main():
                     elif last['eventType'] == 'WorkflowExecutionCancelRequested':
                         print 'WorkflowExecutionCancelRequested'
                         history1 = [event for event in task['events'] if event['eventType'] == 'ActivityTaskScheduled']
-                        last1 = history1[-1]
+                        last1 = history1[0]
                         response = client.respond_decision_task_completed(
                             taskToken = task['taskToken'],
                             decisions = [

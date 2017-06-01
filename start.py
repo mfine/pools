@@ -12,10 +12,10 @@ def main():
         client.start_workflow_execution(
             domain = 'pools',
             workflowId = str(uid),
-            workflowType = {'name': 'workflow', 'version': '1.0'},
+            workflowType = {'name': 'workflow', 'version': '1.1'},
             taskList = {'name': 'workflow'},
             executionStartToCloseTimeout = '31536000',
-            taskStartToCloseTimeout = 'NONE',
+            taskStartToCloseTimeout = '15',
             childPolicy = 'ABANDON',
         )
     except ClientError as e:
